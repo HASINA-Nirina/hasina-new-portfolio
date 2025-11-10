@@ -1,12 +1,20 @@
 "use client";
 
 import React, { useState, useEffect } from "react";
-import { Download, User, Code, Link, GitBranch, Mail, Phone, Facebook, Github, Menu, X, Eye, UserStar } from "lucide-react";
+// FIX: Remplacement de UserStar par UserRound car UserStar cause une erreur de compilation dans cet environnement.
+import { Download, User, Code, Link, GitBranch, Mail, Phone, Facebook, Github, Menu, X, Eye, UserRound } from "lucide-react";
 import { motion } from "framer-motion";
 import { BsEyeglasses } from "react-icons/bs";
 
+// --- Ajout de l'interface pour les props de NavItem (Correction TypeScript) ---
+interface NavItemProps {
+  href: string;
+  children: React.ReactNode;
+  onClick: () => void;
+}
+
 // --- Navigation Item Component ---
-const NavItem = ({ href, children, onClick }) => (
+const NavItem: React.FC<NavItemProps> = ({ href, children, onClick }) => (
   <a
     href={href}
     onClick={onClick}
@@ -16,65 +24,6 @@ const NavItem = ({ href, children, onClick }) => (
   </a>
 );
 
-// --- Navbar Component ---
-const Navbar = () => {
-  const [isOpen, setIsOpen] = useState(false);
-
-  // Fonction pour fermer le menu mobile lors du clic sur un lien
-  const handleNavClick = () => {
-    if (isOpen) {
-      setIsOpen(false);
-    }
-  };
-
-  return (
-    <nav className="fixed top-0 left-0 w-full z-50 glassmorph-nav shadow-xl">
-      <div className="max-w-7xl mx-auto px-6 py-4">
-        <div className="flex justify-between items-center">
-          {/* Logo/Nom */}
-          <a href="#hero" className="text-2xl font-bold text-white hover:text-[#17f] transition">
-            H<span className="text-[#17f]">JdD</span>
-          </a>
-
-          {/* Menu de navigation pour grand écran */}
-          <div className="hidden md:flex space-x-6">
-            <NavItem href="#hero" onClick={handleNavClick}>Accueil</NavItem>
-            <NavItem href="#about" onClick={handleNavClick}>À propos</NavItem>
-            <NavItem href="#projects" onClick={handleNavClick}>Projets</NavItem>
-            <NavItem href="#contact" onClick={handleNavClick}>Contact</NavItem>
-          </div>
-
-          {/* Bouton pour menu mobile */}
-          <button
-            className="md:hidden text-white p-2 rounded-lg hover:bg-white/10 transition"
-            onClick={() => setIsOpen(!isOpen)}
-            aria-label="Toggle navigation"
-          >
-            {isOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
-          </button>
-        </div>
-      </div>
-      
-      {/* Contenu du menu mobile (avec animation Framer Motion) */}
-      <motion.div
-        initial={false}
-        animate={isOpen ? "open" : "closed"}
-        variants={{
-          open: { opacity: 1, height: "auto", transition: { duration: 0.3 } },
-          closed: { opacity: 0, height: 0, transition: { duration: 0.3 } },
-        }}
-        className={`md:hidden overflow-hidden ${isOpen ? 'border-t border-white/10' : ''}`}
-      >
-        <div className="px-2 pt-2 pb-3 space-y-1 sm:px-3 flex flex-col" onClick={handleNavClick}>
-          <NavItem href="#hero">Accueil</NavItem>
-          <NavItem href="#about">À propos</NavItem>
-          <NavItem href="#projects">Projets</NavItem>
-          <NavItem href="#contact">Contact</NavItem>
-        </div>
-      </motion.div>
-    </nav>
-  );
-};
 
 
 // Interface pour les données des projets
@@ -93,7 +42,7 @@ const projectsData: Project[] = [
     title: "Application web du gestion formation en ligne d'Universite ECAT Taratra",
     description: "Une application web full-stack pour la gestion de formation a distance entres les étudiants par antennes avec paiements livres et forum de messages.",
     technologies: ["Next.js 15", "FastAPI", "PostgreSQL", "Tailwind CSS"],
-    link: "..",
+    link: "#", // Changé de ".." à "#" pour éviter une redirection non valide
     github: "https://github.com/HASINA-Nirina/",
     imageUrls: [
       "/img/1.png",
@@ -112,8 +61,8 @@ const projectsData: Project[] = [
     title: "Application mobile quizz battle geolocalisé entre amis",
     description: "Une application mobile full-stack pour les quizz qui contient des differentes types des questions avec son catégories par niveau et peut aussi pour faire une multiplayer entre amis.",
     technologies: ["Flutter", "Dart", "Supabase", "Socket.io"],
-    link:"..",
-    github:"https://github.com/HASINA-Nirina/",
+    link: "#", // Changé de ".." à "#" pour éviter une redirection non valide
+    github: "https://github.com/HASINA-Nirina/",
     imageUrls: [
       "/img/11.png",
       "/img/12.png",
@@ -122,7 +71,13 @@ const projectsData: Project[] = [
 ];
 
 // Composant pour le diaporama d'images
-const ProjectSlideshow: React.FC<{ imageUrls: string[], title: string }> = ({ imageUrls, title }) => {
+// Typage ajouté pour les props
+interface ProjectSlideshowProps {
+    imageUrls: string[];
+    title: string;
+}
+
+const ProjectSlideshow: React.FC<ProjectSlideshowProps> = ({ imageUrls, title }) => {
   const [currentIndex, setCurrentIndex] = useState(0);
 
   // Logique d'intervalle pour changer l'index de l'image
@@ -215,7 +170,7 @@ const globalStyles = `
 
   @keyframes typing {
     0% { width: 0 }
-    100% { width: 45% }
+    100% { width: 100% } /* Ajusté pour correspondre au texte "À propos" */
   }
   @keyframes blink-cursor {
     0%, 100% { border-color: transparent }
@@ -265,7 +220,7 @@ export default function App() {
 
       {/* Section Hero */}
       <section id="hero" className="relative z-10 max-w-7xl mx-auto px-6 flex items-center justify-center min-h-[calc(100vh-80px)]">
-        <div className="flex flex-col-reverse md:flex-row-reverse items-center gap-10 md:gap-20 w-full -pt-20 pb-49">
+        <div className="flex flex-col-reverse md:flex-row-reverse items-center gap-10 md:gap-20 w-full pt-10 pb-20"> {/* Ajustement du padding */}
           <div className="w-full md:w-2/3 text-center md:text-left">
             <h1 className="text-4xl md:text-6xl font-extrabold leading-tight mb-4">
               Bonjour, je suis{" "}
@@ -314,6 +269,7 @@ export default function App() {
                 <div className="bg-[#0b0b12] rounded-full p-1">
                   <div className="w-[220px] h-[220px] md:w-[260px] md:h-[260px] rounded-full overflow-hidden border-4 border-black/30 shadow-2xl transform transition duration-500 hover:scale-105 floating-image">
                     {/* Note: Dans une application réelle, assurez-vous que about.jpg est bien dans le dossier /public */}
+                    {/* Utilisation de width et height sur img est pour l'optimisation Next/Image, ici elles sont passées comme props classiques */}
                     <img src={profileImageUrl} alt="Photo de profil" width={520} height={520} className="object-cover w-full h-full" />
                   </div>
                 </div>
@@ -364,9 +320,10 @@ export default function App() {
               <span
                 className="inline-block overflow-hidden whitespace-nowrap"
                 style={{
-                  animation: "typing 1s steps(6, end) infinite alternate, blink-cursor 0.7s step-end infinite",
+                  animation: "typing 1.5s steps(9, end) infinite alternate, blink-cursor 0.7s step-end infinite", // Ajusté le nombre de pas (steps)
                   borderRight: "4px solid #17f",
                   paddingRight: "2px",
+                  maxWidth: "200px", // Limiter la largeur pour l'effet de dactylographie
                 }}
               >
                 À propos
@@ -396,7 +353,8 @@ export default function App() {
               animate={{ rotate: [0, 10, -10, 0] }}
               transition={{ repeat: Infinity, duration: 4, ease: "easeInOut" }}
             >
-              <UserStar className="w-full h-full" />
+              {/* FIX: Utilisation de UserRound à la place de UserStar */}
+              <UserRound className="w-full h-full" />
             </motion.div>
           </div>
         </div>
@@ -479,7 +437,7 @@ export default function App() {
       {/* --- Section Contact --- */}
       <motion.section
         id="contact"
-        className="relative z-10 mx-auto px-6 pt-20 " // Retrait de la max-w-7xl et du padding-bottom pour l'arrière-plan
+        className="relative z-10 mx-auto px-6 pt-20" // Retrait de la max-w-7xl et du padding-bottom pour l'arrière-plan
         initial="hidden"
         whileInView="visible"
         viewport={{ once: true, amount: 0.1 }}
