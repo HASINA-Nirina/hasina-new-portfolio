@@ -225,7 +225,7 @@ export default function App() {
             <h1 className="text-4xl md:text-6xl font-extrabold leading-tight mb-4">
               Bonjour, je suis{" "}
               <span className="text-[#17f] drop-shadow-[0_6px_20px_rgba(23,127,255,0.25)]">
-                ROHINIAINA Herijaona
+                HASINIRINA Jean de Dieu
               </span>
             </h1>
 
