@@ -24,8 +24,6 @@ const NavItem: React.FC<NavItemProps> = ({ href, children, onClick }) => (
   </a>
 );
 
-
-
 // Interface pour les données des projets
 interface Project {
   title: string;
@@ -246,7 +244,7 @@ export default function App() {
 
               <a
                 href="/cv.pdf"
-                download
+                download="Hasina-CV.pdf"
                 className="inline-flex items-center justify-center gap-2 px-6 py-3 rounded-xl border border-[#17f] text-[#17f] font-medium transition hover:bg-[#17f] hover:text-black hover:shadow-md hover:shadow-[#17f]/30 w-full sm:w-auto"
               >
                 <Download className="w-5 h-5" />
